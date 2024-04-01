@@ -1,4 +1,5 @@
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -143,11 +144,11 @@ public class ParityBitCorrectionTester{
             }
         }
         if(allZeroHorizontal && allZeroVertical){ // no 0 in both vertical column and horizontal row
-            errorIndexes.add(0);
+            errorIndexes.add(-1);
             return errorIndexes;
         }
         if(allZeroHorizontal || allZeroVertical){ // have 1s in either column or row but not both
-            errorIndexes.add(-1);
+            errorIndexes.add(-2);
             return errorIndexes;
         }
 
@@ -198,6 +199,27 @@ public class ParityBitCorrectionTester{
         return dataWord;
     }
 
+    public static boolean isErrorCorrectlyDetected(boolean[][] codeWord,int[][] originalErrorPosition, ArrayList<Integer> errorPositionList){
+        if(originalErrorPosition.length != errorPositionList.size()){
+            return false;
+        }
+        int[] originalErrorIndexes = new int[originalErrorPosition.length];
+        int[] foundErrorIndexes = new int[originalErrorPosition.length];
+        
+        for(int i = 0; i < originalErrorPosition.length;i++){
+            originalErrorIndexes[i] = originalErrorPosition[i][0] + codeWord[0].length * originalErrorPosition[i][1];
+            foundErrorIndexes[i] = errorPositionList.get(i);
+        }
+        Arrays.sort(originalErrorIndexes);
+        Arrays.sort(foundErrorIndexes);
+        for(int i = 0; i < originalErrorPosition.length;i++){
+            if(foundErrorIndexes[i] != originalErrorIndexes[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void testParity(int Testindex,int numberOfErrors){
         ParityGenerator PG = new ParityGenerator();
 
@@ -240,24 +262,39 @@ public class ParityBitCorrectionTester{
         System.out.print("\n\n");
         System.out.print("calculating error positions...\n\n");
         ArrayList<Integer> errorPositionsList = locateErrorIndex(codeWord, syndrome);
-        // if(errorPositionsList.size() == 1){
 
-        // }
         System.out.print("codeWord : ");
         showCodeBlock(codeWord); //show codeword with an error
         System.out.print("\n\nerror at : ");
         // System.out.println(errorPositionsList);
         showErrorLocation(errorPositionsList,codeWord);
-        System.out.print("\n");
+        System.out.print("\n\n");
+        if(isErrorCorrectlyDetected(codeWord, errorPositions, errorPositionsList)){
+            System.out.print("error correctly detected\n");
+        }else{
+            System.out.print("error wrongly detected\n\n");
+        }
+        // asserting cases
+        // -1 no error detected
+        // -2 unable to correctly locate error
+        // 
+
     }
 
     public static void main(String args[]){
+        int trialNum = 1;
 
-        for(int i = 1;i <= 5;i++){
-            testParity(i,1);
+        for(int i = 1;i <= 2;i++){
+            testParity(trialNum,1);
+            trialNum++;
         }
-        for(int i = 1;i <= 5;i++){
-            testParity(i,2);
+        for(int i = 1;i <= 2;i++){
+            testParity(trialNum,2);
+            trialNum++;
+        }
+        for(int i = 1;i <= 2;i++){
+            testParity(trialNum,3);
+            trialNum++;
         }
         System.out.print("\n");
 
