@@ -50,7 +50,7 @@ public class HammingCodeGenerator {
         dataWordSB.reverse();
 
 
-        int paritySize = 3;
+        int paritySize = 4;
         int dataIndex = 0;
         StringBuilder codeWord = new StringBuilder("");
         boolean parity = false;
