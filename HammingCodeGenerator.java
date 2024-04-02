@@ -1,5 +1,6 @@
 import java.lang.Math;
 
+
 public class HammingCodeGenerator {
 
     public static boolean XOR(char c1,char c2){
