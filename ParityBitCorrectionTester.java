@@ -199,16 +199,22 @@ public class ParityBitCorrectionTester{
         return dataWord;
     }
 
-    public static boolean isErrorCorrectlyDetected(boolean[][] codeWord,int[][] originalErrorPosition, ArrayList<Integer> errorPositionList){
-        if(originalErrorPosition.length != errorPositionList.size()){
+    public static boolean isErrorCorrectlyDetected(boolean[][] codeWord,int[][] originalErrorPosition, ArrayList<Integer> foundErrorPositionList){
+        if(originalErrorPosition.length != foundErrorPositionList.size()){
             return false;
         }
+        // if(foundErrorPositionList.size() == 1 && foundErrorPositionList.get(0) == -1){
+        //     return true;
+        // }
+        // if(foundErrorPositionList.size() == 1 && foundErrorPositionList.get(0) == -2){
+        //     return false;
+        // }
         int[] originalErrorIndexes = new int[originalErrorPosition.length];
         int[] foundErrorIndexes = new int[originalErrorPosition.length];
         
         for(int i = 0; i < originalErrorPosition.length;i++){
             originalErrorIndexes[i] = originalErrorPosition[i][0] + codeWord[0].length * originalErrorPosition[i][1];
-            foundErrorIndexes[i] = errorPositionList.get(i);
+            foundErrorIndexes[i] = foundErrorPositionList.get(i);
         }
         Arrays.sort(originalErrorIndexes);
         Arrays.sort(foundErrorIndexes);
@@ -225,7 +231,6 @@ public class ParityBitCorrectionTester{
 
         boolean[][] dataWord = generateRandomDataWord();
 
-        System.out.print("\n\n================================================================================\n\n");
         System.out.print("Trial number " + Testindex + " \n\n");
         System.out.print("dataWord : ");
         showOriginalData(dataWord);
@@ -240,15 +245,14 @@ public class ParityBitCorrectionTester{
 
         //////////////////////////
         int[][] errorPositions = new int[numberOfErrors][];
-
         for(int i = 0; i < numberOfErrors;i++){
             errorPositions[i] = randomizeSingleBitErrorPosition(codeWord);
             codeWord[errorPositions[i][1]][errorPositions[i][0]] = !codeWord[errorPositions[i][1]][errorPositions[i][0]];
         }
         //////////////////////////
-        System.out.print("codeWord : ");
+        System.out.print("flipped codeWord : ");
         showCodeBlock(codeWord); //show codeword with an error
-        System.out.print("\n\nerror at : ");
+        System.out.print("\n\n        error at : ");
         showErrorLocation(errorPositions, codeWord);
 
         boolean[][] syndrome = PG.calculateSyndrome(codeWord); //calculate the syndrome
@@ -261,41 +265,61 @@ public class ParityBitCorrectionTester{
         showVerticalSyndrome(syndrome);
         System.out.print("\n\n");
         System.out.print("calculating error positions...\n\n");
-        ArrayList<Integer> errorPositionsList = locateErrorIndex(codeWord, syndrome);
-
-        System.out.print("codeWord : ");
+        ArrayList<Integer> foundErrorPositionsList = locateErrorIndex(codeWord, syndrome);
+        
+        System.out.print("flipped codeWord : ");
         showCodeBlock(codeWord); //show codeword with an error
-        System.out.print("\n\nerror at : ");
+        System.out.print("\n\n        error at : ");
         // System.out.println(errorPositionsList);
-        showErrorLocation(errorPositionsList,codeWord);
+        showErrorLocation(foundErrorPositionsList,codeWord);
         System.out.print("\n\n");
-        if(isErrorCorrectlyDetected(codeWord, errorPositions, errorPositionsList)){
-            System.out.print("error correctly detected\n");
+
+        if(foundErrorPositionsList.get(0) == -1 && errorPositions.length == 0){
+            System.out.print("0 bitflip occured and 0 bitflip detected\n\n");
+        }else if(foundErrorPositionsList.get(0) == -2){
+            // 2 bit flip on the same row or column
+            // this message wont be printed if the number of bitflip is 1 
+            System.out.print(numberOfErrors + " bitflips occured but the decoder could not locate the bitflip\n\n");
+        }
+        else if(isErrorCorrectlyDetected(codeWord, errorPositions, foundErrorPositionsList)){
+            // number of generated bitflips equal to the number of found bitflips
+            // and the bitflips indexs are correspond to the generated bitflips
+            System.out.print("bitflip correctly detected and located\n\n");
         }else{
-            System.out.print("error wrongly detected\n\n");
+            // number of generated bitflips equal or not to the number of found bitflips
+            // if equal,the bitflips indexs are not correspond to the generated bitflips
+            System.out.print("bitflip wrongfullly detected or located\n\n");
         }
         // asserting cases
         // -1 no error detected
         // -2 unable to correctly locate error
-        // 
+        // else verify using isErrorCorrectlyDetected()
 
     }
 
     public static void main(String args[]){
         int trialNum = 1;
 
-        for(int i = 1;i <= 2;i++){
+        for(int i = 1;i <= 10;i++){
+            System.out.print("================================================================================\n\n");
+            System.out.print(" Test Case : applying no bitflip\n\n");
+            testParity(trialNum,0);
+            trialNum++;
+        }
+        for(int i = 1;i <= 10;i++){
+            System.out.print("================================================================================\n\n");
+            System.out.print(" Test Case : applying a bitflip\n\n");
             testParity(trialNum,1);
             trialNum++;
         }
-        for(int i = 1;i <= 2;i++){
-            testParity(trialNum,2);
-            trialNum++;
-        }
-        for(int i = 1;i <= 2;i++){
-            testParity(trialNum,3);
-            trialNum++;
-        }
+        // for(int i = 1;i <= 2;i++){
+        //     testParity(trialNum,2);
+        //     trialNum++;
+        // }
+        // for(int i = 1;i <= 2;i++){
+        //     testParity(trialNum,3);
+        //     trialNum++;
+        // }
         System.out.print("\n");
 
 
