@@ -8,10 +8,13 @@ public class ParityGenerator {
     }
 
     public boolean XOR(boolean B1,boolean B2){
+        // XOR method for 2 booleans
         return ((B1 && !B2) || (!B1 && B2));
     }
 
     public boolean[][] GenerateParity(boolean[][] dataWord,int wordSize,int numWord){
+
+        //generate the codeword
         // true represents 1
         // false represents 0
 
@@ -74,16 +77,8 @@ public class ParityGenerator {
 
     }
 
-    public int[] randomizeSingleBitErrorPosition(boolean[][] codeword){
-        
-        int randX = this.randomGenerator.nextInt(codeword[0].length);
-        int randY = this.randomGenerator.nextInt(codeword.length);
-        return new int[]{randX,randY};
-        // showParityProcess(codeword,randX,randY);
-
-    }
-
     public boolean[][] calculateSyndrome(boolean[][] codeword){
+        // calculate the syndrome
         boolean[][] syndrome = new boolean[2][];
 
         boolean parity = false;
@@ -114,7 +109,7 @@ public class ParityGenerator {
     }
 
     public int locateErrorPosition(boolean[][] syndrome){
-        // -1
+        // find error position base on the intersection of vertical parity bits and horizontal parity bits
         int errorX = -1;
         int errorY = -1;
 

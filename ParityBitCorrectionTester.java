@@ -6,7 +6,7 @@ import java.util.Random;
 public class ParityBitCorrectionTester{
 
     public static void showOriginalData(boolean[][] dataWord){
-
+        // show dataword
         String buffer = "";
         for(int j = 0;j < dataWord.length;j++){
             for(int i = 0;i < dataWord[j].length;i++){
@@ -25,7 +25,7 @@ public class ParityBitCorrectionTester{
     }
 
     public static int[] randomizeSingleBitErrorPosition(boolean[][] codeword){
-        
+        // method to show codeblock generate bitflip based on x and y index of 2d array codeword
         Random rand = new Random();
         int randX = rand.nextInt(codeword[0].length);
         int randY = rand.nextInt(codeword.length);
@@ -35,7 +35,7 @@ public class ParityBitCorrectionTester{
     }
 
     public static void showCodeBlock(boolean[][] codeWord){
-
+        // method to show codeblock
         StringBuilder buffer = new StringBuilder();
 
         for(int j = 0;j < codeWord.length;j++){
@@ -52,6 +52,7 @@ public class ParityBitCorrectionTester{
     }
 
     public static void showVerticalSyndrome(boolean[][] syndrome){
+        // method to show vertical syndrome
         StringBuilder buffer = new StringBuilder();
         buffer.append("[");
         for(int i = 0;i < syndrome[1].length;i++){
@@ -62,6 +63,7 @@ public class ParityBitCorrectionTester{
     }
 
     public static void showHorizontalSyndrome(boolean[][] syndrome){
+        // method to show horizontal syndrome
         StringBuilder buffer = new StringBuilder();
         buffer.append("[");
         for(int i = 0;i < syndrome[0].length;i++){
@@ -72,6 +74,7 @@ public class ParityBitCorrectionTester{
     }
 
     public static void showErrorLocation(int[][] errorPositions,boolean[][] codeWord){
+        // method to show error location
         StringBuilder buffer = new StringBuilder();
         boolean isError = false;
         for(int j = 0; j < codeWord.length;j++){
@@ -96,6 +99,7 @@ public class ParityBitCorrectionTester{
     }
 
     public static void showErrorLocation(ArrayList<Integer> errorPositionsList,boolean[][] codeWord){
+        // method to show error location
         StringBuilder buffer = new StringBuilder();
         boolean isError = false;
         for(int j = 0; j < codeWord.length;j++){
@@ -199,16 +203,12 @@ public class ParityBitCorrectionTester{
         return dataWord;
     }
 
+
     public static boolean isErrorCorrectlyDetected(boolean[][] codeWord,int[][] originalErrorPosition, ArrayList<Integer> foundErrorPositionList){
         if(originalErrorPosition.length != foundErrorPositionList.size()){
             return false;
         }
-        // if(foundErrorPositionList.size() == 1 && foundErrorPositionList.get(0) == -1){
-        //     return true;
-        // }
-        // if(foundErrorPositionList.size() == 1 && foundErrorPositionList.get(0) == -2){
-        //     return false;
-        // }
+
         int[] originalErrorIndexes = new int[originalErrorPosition.length];
         int[] foundErrorIndexes = new int[originalErrorPosition.length];
         
@@ -312,14 +312,7 @@ public class ParityBitCorrectionTester{
             testParity(trialNum,1);
             trialNum++;
         }
-        // for(int i = 1;i <= 2;i++){
-        //     testParity(trialNum,2);
-        //     trialNum++;
-        // }
-        // for(int i = 1;i <= 2;i++){
-        //     testParity(trialNum,3);
-        //     trialNum++;
-        // }
+
         System.out.print("\n");
 
 

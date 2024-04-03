@@ -41,7 +41,9 @@ public class HammingCodeTester {
         return syndrome;
     }
 
-    public static void hammingCodeTrial(char alphabet){
+    public static void hammingCodeTrial(char alphabet,boolean applyBitFlip){
+
+        
         Random rand = new Random();
         System.out.print("alphabet : " + alphabet + "\n\n");
 
@@ -54,13 +56,15 @@ public class HammingCodeTester {
 
         String codeWord = HammingCodeGenerator.generateCodeWord(dataWord);
         System.out.print("codeWord : ");
-        for(int i = 0; i < codeWord .length();i++){
+        for(int i = 0; i < codeWord.length();i++){
             System.out.print(codeWord.charAt(i) + " ");
         }
         System.out.print("\n\n");
 
-        int errorPosition = (codeWord.length()) - (rand.nextInt(codeWord.length() + 1));
-        if(codeWord.length() - errorPosition  == 0){
+        int errorPosition = (codeWord.length()) - (rand.nextInt(codeWord.length()) + 1);
+        
+
+        if(!applyBitFlip){
             System.out.print("applying no error\n\n");
         }else{
             System.out.print("applying error at position " + (codeWord.length() - errorPosition) + "\n\n");
@@ -87,9 +91,20 @@ public class HammingCodeTester {
     }
     
     public static void main(String args[]){
+
+        System.out.print("Test case : apply no bit flip\n\n");
+        hammingCodeTrial('A',false);
+        System.out.print("\n\n==================================================================================\n\n");
+
+
+        System.out.print("Test case : apply no bit flip\n\n");
+        hammingCodeTrial('Z',false);
+        System.out.print("\n\n==================================================================================\n\n");
+
         
-        for(int i = 65;i <= 75;i++){
-            hammingCodeTrial((char) i);
+        for(int i = 65;i <= 73;i++){
+            System.out.print("Test case : apply a bitflip\n\n");
+            hammingCodeTrial((char) i,true);
             System.out.print("\n\n==================================================================================\n\n");
         }
         
