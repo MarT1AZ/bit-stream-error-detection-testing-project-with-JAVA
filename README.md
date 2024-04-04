@@ -3,5 +3,7 @@ This project is a part of the course ITCS323_Computer Data Communication. this p
 
 The methods of detecting error are 2- dimensional even parity bit checking, checksum, CRC and hamming code
 
-This is written by
-Note Suppakorn
+The code is provided by
+Marz -- Phudis Jittiwonsamarn
+Note -- Suppakorn Pojsomphong
+
