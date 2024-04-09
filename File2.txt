@@ -1,1 +1,0 @@
-Checksum are an error-detecting technique.
